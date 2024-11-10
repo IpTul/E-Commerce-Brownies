@@ -1,10 +1,8 @@
 # 💫 About Me:
 👩‍💻Working In Progress
 
-<img align="right" height="150" src="https://i.imgflip.com/65efzo.gif"  />
-
 ## 🌐 Socials:
-Discord Username
+<h1>Discord Username</h1>
 [![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white)](https://discord.gg/IpTul) 
 
 # 💻 Tech Stack:
