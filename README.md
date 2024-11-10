@@ -3,8 +3,7 @@
 
 ## 🌐 Socials:
 <div align="left">
-<img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=&color=7289DA&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="discord logo"  /> IpTul
-<h1>Discord Username : Iptul</h1>
+<h1><img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=&color=7289DA&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="discord logo"  /> Username : Iptul</h1>
 </div>
 
 # 💻 Tech Stack:
