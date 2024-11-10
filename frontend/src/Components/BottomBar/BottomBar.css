@@ -1,0 +1,45 @@
+@media (min-width: 481px) {
+  .bottom-bar {
+    display: none;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .bottom-bar {
+    display: flex;
+    /* overflow: hidden; */
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -1px 3px -2px black;
+    background-color: white;
+  }
+
+  .bottom-bar-action {
+    /* float: left; */
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 5px 30px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .bottom-bar-action i {
+    color: #5e2a00;
+  }
+
+  .bottom-bar-action p {
+    font-size: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bottom-bar-action:active {
+    background-color: #ddd;
+    color: black;
+    /* transition: 0.2s; */
+  }
+}

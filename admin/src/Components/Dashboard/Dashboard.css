@@ -1,0 +1,31 @@
+@media (min-width: 481px) {
+  .Dashboard {
+    box-sizing: border-box;
+    width: 175vh;
+    padding: 30px 50px;
+    border-radius: 6px;
+    background: white;
+  }
+
+  .menu-display {
+    display: flex;
+  }
+
+  .menu-field {
+    text-align: center;
+    align-content: center;
+    box-sizing: border-box;
+    width: 200px;
+    height: 200px;
+    border-radius: 6px;
+    margin: 20px;
+    color: #5e2a00;
+    background: #cea585;
+  }
+
+  .desc {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {}

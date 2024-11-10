@@ -1,0 +1,11 @@
+@media (min-width: 481px) {
+  .admin {
+    display: flex;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .admin {
+    flex-direction: column;
+  }
+}

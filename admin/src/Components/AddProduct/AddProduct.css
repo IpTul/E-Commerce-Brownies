@@ -1,0 +1,137 @@
+@media (min-width: 481px) {
+  .addproduct-btn-mobile {
+    display: none;
+  }
+
+  .add-product {
+    box-sizing: border-box;
+    width: 175vh;
+    /* max-width: 800px; */
+    padding: 30px 50px;
+    border-radius: 6px;
+    background: white;
+  }
+
+  .addproduct-itemfield {
+    width: 100%;
+    color: #7b7b7b;
+    font-size: 16px;
+  }
+
+  .addproduct-itemfield input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    border-radius: 4px;
+    padding-left: 15px;
+    border: 1px solid #c3c3c3;
+    outline: none;
+    color: #7b7b7b;
+    font-family: 'Poppins';
+    font-size: 14px;
+  }
+
+  .addproduct-price {
+    display: flex;
+    gap: 40px;
+  }
+
+  .add-product-selector {
+    padding: 10px;
+    width: 100px;
+    height: 50px;
+    font-size: 14px;
+    color: #7b7b7b;
+    border: 1px solid #7b7b7b8d;
+    border-radius: 4px;
+  }
+
+  .addproduct-thumbnail-img {
+    border-radius: 4px;
+    margin: 10px 0px;
+    background-color: #e7e7e7;
+  }
+
+  .addproduct-btn {
+    margin-top: 20px;
+    width: 160px;
+    height: 50px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #8B3E00;
+    border: none;
+    cursor: pointer;
+    color: white;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .addproduct-btn {
+    display: none;
+  }
+
+  .add-product {
+    box-sizing: border-box;
+    /* max-width: 800px; */
+    /* justify-content: center; */
+    padding: 20px 20px;
+    margin: 10px 10px;
+    border-radius: 6px;
+    background: white;
+  }
+
+  .addproduct-itemfield {
+    width: 100%;
+    color: #7b7b7b;
+    font-size: 14px;
+  }
+
+  .addproduct-itemfield input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    border-radius: 4px;
+    padding-left: 15px;
+    border: 1px solid #c3c3c3;
+    outline: none;
+    color: #7b7b7b;
+    font-family: 'Poppins';
+    font-size: 14px;
+  }
+
+  .addproduct-price {
+    display: flex;
+    gap: 40px;
+  }
+
+  .add-product-selector {
+    padding: 10px;
+    width: 100px;
+    height: 50px;
+    font-size: 14px;
+    color: #7b7b7b;
+    border: 1px solid #7b7b7b8d;
+    border-radius: 4px;
+  }
+
+  .addproduct-thumbnail-img {
+    border-radius: 4px;
+    margin: 10px 0px;
+    background-color: #e7e7e7;
+    /* height: 200px; */
+  }
+
+  .addproduct-btn-mobile {
+    width: 80px;
+    height: 40px;
+    border-radius: 6px;
+    font-size: 16px;
+    float: right;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #6079ff;
+    color: white;
+  }
+}

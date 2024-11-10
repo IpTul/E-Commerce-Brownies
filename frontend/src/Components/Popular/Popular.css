@@ -1,0 +1,138 @@
+@media (min-width: 481px) {
+  .popular h1 {
+    margin-bottom: 2rem;
+    text-align: center;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .break {
+    text-align: center;
+    justify-items: center;
+    width: 100vw;
+    margin-bottom: 5rem;
+  }
+
+  .break hr {
+    width: 30%;
+    border: none;
+    border-radius: 10px;
+    height: 3px;
+    background: white;
+  }
+
+  .popular-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .arrow1 {
+    text-align: center;
+    width: 100vw;
+  }
+
+  .arrow1 img {
+    width: 20%;
+  }
+
+  .splash1 {
+    display: flex;
+    align-items: center;
+    gap: 10rem;
+    padding-left: 10rem;
+    width: 100vw;
+  }
+
+  .splash1 img,
+  .splash2 img {
+    width: 550px;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .splash1 img:hover,
+  .splash2 img:hover {
+    width: 550px;
+    transform: scale(1.1);
+  }
+
+  .arrow2 {
+    text-align: center;
+    width: 60vw;
+  }
+
+  .arrow2 img {
+    width: 50%;
+  }
+
+  .splash2 {
+    display: flex;
+    align-items: center;
+    gap: 10rem;
+    padding-left: 5rem;
+    width: 100vw;
+  }
+
+  .splas-desc-fields {
+    text-align: center;
+    width: 35rem;
+    font-size: 50px;
+  }
+
+  .splash-desc-head {
+    font-weight: bold;
+    color: #fcd441;
+    text-transform: uppercase;
+  }
+
+  .splash-desc {
+    color: white;
+    font-size: 25px;
+  }
+
+  .popular h1 {
+    color: white;
+    font-size: 50px;
+    font-weight: 600;
+  }
+
+  .popular-item {
+    margin-top: 50px;
+    display: flex;
+    gap: 30px;
+  }
+
+  .popular-item img {
+    width: 30vw;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .popular {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+  }
+
+  .popular h1 {
+    color: #171717;
+    font-size: 40px;
+    font-weight: 600;
+  }
+
+  .popular hr {
+    width: 150px;
+    height: 6px;
+    border-radius: 10px;
+    background: #252525;
+  }
+
+  .popular-item {
+    margin-top: 50px;
+    display: grid;
+    gap: 30px;
+  }
+}

@@ -1,0 +1,10 @@
+.admin {
+  background: #D6D6D6;
+  height: 130vh;
+}
+
+.import {
+  position: absolute;
+  top: 8rem;
+  left: 13rem;
+}
