@@ -1,4 +1,3 @@
-# 💫 About Me:
 👩‍💻Working In Progress
 
 ## 🌐 Socials:
