@@ -1,0 +1,50 @@
+@media (min-width: 481px) {
+  h1 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+  hr {
+    height: 0.1rem;
+    background-color: white;
+  }
+  .container {
+    padding-top: 7vw;
+    margin: 0px 2rem;
+  }
+  .profile-content {
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255, 0.2);
+    padding: 1rem;
+  }
+  .table {
+    width: 100%; /* Ensure the table container takes full width */
+    margin: 20px 0; /* Margin for spacing */
+  }
+
+  .table table {
+    width: 100%; /* Make the table take full width */
+    border-collapse: collapse; /* Collapse borders */
+  }
+
+  .table thead {
+    color: white; /* White text for header */
+  }
+  .table tbody {
+    color: #fcd441; /* White text for header */
+  }
+
+  .table th,
+  .table td {
+    padding: 8px; /* Padding for cells */
+    text-align: left; /* Align text to the left */
+  }
+
+  .table th {
+    font-weight: bold; /* Bold text for headers */
+    font-size: 20px; /* Font size for table data */
+  }
+
+  .table td {
+    font-size: 20px; /* Font size for table data */
+  }
+}

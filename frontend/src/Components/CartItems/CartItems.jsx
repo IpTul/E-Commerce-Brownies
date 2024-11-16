@@ -2,11 +2,10 @@ import React, { useContext, useState } from "react"
 import "./CartItems.css"
 import { ShopContext } from "../../Context/ShopContext"
 import { Buffer } from "buffer"
-import CryptoJS from "crypto-js"
-import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2';
 
 const CartItems = () => {
-  const { all_product, cartItems, removeFromCart, getCartDetails } =
+  const { all_product, cartItems, removeFromCart, getCartDetails, setCartItems, getDefaultCart } =
     useContext(ShopContext)
   const { productIds } = getCartDetails()
 
@@ -46,101 +45,95 @@ const CartItems = () => {
   const [noTelp, setNoTelp] = useState("")
   const [address, setAddress] = useState("")
 
-  const secretKey = process.env.REACT_APP_SECRET
-
-  const encrypt = (text) => {
-    return CryptoJS.AES.encrypt(text, secretKey).toString()
-  }
+  const token = localStorage.getItem('auth-token');
 
   const handleCheckoutLink = async () => {
-    const secret = process.env.REACT_APP_SECRET
-    const encodedSecret = Buffer.from(secret).toString("base64")
-    const basicAuth = `Basic ${encodedSecret}`
+    const { value: confirmed } = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, proceed!',
+      cancelButtonText: 'No, cancel!',
+    });
 
-    const orderId = `order-${Date.now()}`
-    const encodedOrderId = CryptoJS.AES.encrypt(orderId, "brownies").toString()
-    const encodedOrderIdReplaced = encodedOrderId
-      .replace("+", "brownies")
-      .replace("/", "browcious")
-      .replace("=", "samarinda")
-    const finalOutput = encodedOrderIdReplaced.substring(0, 30)
+    if (confirmed) {
+      const secret = process.env.REACT_APP_SECRET;
+      const encodedSecret = Buffer.from(secret).toString("base64");
+      const basicAuth = `Basic ${encodedSecret}`;
 
-    const items = productIds
-      .map((id) => {
-        const product = all_product.find((p) => p.id === parseInt(id))
+      const orderId = `order-${Date.now()}`;
 
-        if (product && cartItems[id] > 0) {
-          return {
-            id: product.id,
-            name: product.name,
-            category: product.category,
-            quantity: cartItems[id],
-            price: product.new_price,
-            address: address,
+      const items = productIds
+        .map((id) => {
+          const product = all_product.find((p) => p.id === parseInt(id));
+
+          if (product && cartItems[id] > 0) {
+            return {
+              id: product.id,
+              name: product.name,
+              category: product.category,
+              quantity: cartItems[id],
+              price: product.new_price,
+            };
           }
-        }
-        return null
-      })
-      .filter((item) => item !== null)
+          return null;
+        })
+        .filter((item) => item !== null);
 
-    // const customerDetails = {
-    //   first_name: nama,
-    //   phone: noTelp,
-    //   shipping_address: {
-    //     first_name: nama,
-    //     phone: noTelp,
-    //     address: address,
-    //   },
-    // }
-
-    const customerdetails = {
-      first_name: "John",
-      last_name: "Doe",
-      email: "johndoe@example.com",
-      phone: "+628123456789",
-      billing_address: {
-        first_name: "John",
-        last_name: "Doe",
-        address: "123 Main St",
-        city: "Jakarta",
-        postal_code: "12160",
-        country_code: "ID"
-      },
-      shipping_address: {
-        first_name: "John",
-        last_name: "Doe",
-        address: "123 Main St",
-        city: "Jakarta",
-        postal_code: "12160",
-        country_code: "ID"
-      }
-    }
-
-    const data = {
-      item_details: items,
-      transaction_details: {
-        order_id: orderId,
-        gross_amount: total,
-        customer_details: customerdetails,
-      },
-    }
-
-    const response = await fetch(
-      `${process.env.REACT_APP_API}/v1/payment-links`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: basicAuth,
+      const data = {
+        item_details: items,
+        transaction_details: {
+          order_id: orderId,
+          gross_amount: total,
         },
-        body: JSON.stringify(data),
-      }
-    )
+      };
 
-    const paymentLink = await response.json()
-    // console.log(paymentLink)
-    setPaymentUrl(paymentLink.payment_url)
+      const response = await fetch(
+        `${process.env.REACT_APP_API}/v1/payment-links`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: basicAuth,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const paymentLink = await response.json();
+      setPaymentUrl(paymentLink.payment_url);
+
+      const customer_details = {
+        no_telp_customer: noTelp,
+        alamat_customer: address,
+        products: items,
+      };
+
+      if (!noTelp || !address) {
+        alert("Please fill in all required fields.");
+      } else {
+        const response2 = await fetch("http://localhost:4000/createcheckout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+          body: JSON.stringify(customer_details),
+        });
+
+        const checkoutResponse = await response2.json();
+        if (checkoutResponse.success) {
+          console.log("Checkout successful:", checkoutResponse);
+          setCartItems(getDefaultCart());
+        } else {
+          console.error("Checkout failed:", checkoutResponse);
+        }
+      }
+    }
   }
 
   return (
@@ -203,8 +196,8 @@ const CartItems = () => {
               </div>
               <hr />
               <div className="cartitems-total-item">
-                <p style={{ color: "red" }}>Discount Promo</p>
-                <p style={{ color: "red" }}>Rp. {discount}</p>
+                <p style={{ color: "#FCD441" }}>Discount Promo</p>
+                <p style={{ color: "#FCD441" }}>Rp. {discount}</p>
               </div>
               <hr />
               <div className="cartitems-total-item">
@@ -214,7 +207,9 @@ const CartItems = () => {
             </div>
             <button onClick={handleCheckoutLink}>PROCEED TO CHECKOUT</button>
             <div className="payment-url">
-              <a href={paymentUrl} target="_blank" rel="noopener noreferrer">{paymentUrl}</a>
+              {paymentUrl &&
+                <a href={paymentUrl} target="_blank" rel="noopener noreferrer">Payment Link</a>
+              }
             </div>
           </div>
 
@@ -229,32 +224,35 @@ const CartItems = () => {
               />
               <button onClick={handlePromoCodeSubmit}>SUBMIT</button>
             </div>
-            {/* <div className="cartitems-customersdetails">
-            <div className="cartitems-customersdetails-fields">
-              <p>Nama</p>
-              <input
-                type="text"
-                value={nama}
-                onChange={(e) => setNama(e.target.value)}
-              />
+            <div className="cartitems-customersdetails">
+              <div className="cartitems-customersdetails-fields">
+                <p>Nama</p>
+                <input
+                  name="name"
+                  type="text"
+                  value={nama}
+                  onChange={(e) => setNama(e.target.value)}
+                />
+              </div>
+              <div className="cartitems-customersdetails-fields">
+                <p>No Telp (Aktif Wa)</p>
+                <input
+                  name="notelp"
+                  type="number"
+                  value={noTelp}
+                  onChange={(e) => setNoTelp(e.target.value)}
+                />
+              </div>
+              <div className="cartitems-customersdetails-fields">
+                <p>Alamat</p>
+                <input
+                  name="address"
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="cartitems-customersdetails-fields">
-              <p>No Telp (Aktif Wa)</p>
-              <input
-                type="number"
-                value={noTelp}
-                onChange={(e) => setNoTelp(e.target.value)}
-              />
-            </div>
-            <div className="cartitems-customersdetails-fields">
-              <p>Alamat</p>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </div>
-          </div> */}
           </div>
         </div>
       </div>

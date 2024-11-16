@@ -145,6 +145,10 @@ app.get('/allproducts', async (req, res) => {
 
 // creating user login
 const Users = mongoose.model('Users', {
+  id_user: {
+    type: Number,
+    required: true,
+  },
   name: {
     type: String,
   },
@@ -165,33 +169,48 @@ const Users = mongoose.model('Users', {
 })
 
 app.post('/signup', async (req, res) => {
-  let check = await Users.findOne({ email: req.body.email })
-  if (check) {
-    return res.status(400).json({ success: false, errors: "exiting user found with same email address" })
-  }
-
-  let cart = {}
-  for (let i = 0; i < 300; i++) {
-    cart[i] = 0
-  }
-  const user = new Users({
-    name: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    cartData: cart,
-  })
-
-  await user.save()
-
-  const data = {
-    user: {
-      id: user.id
+  try {
+    // Check if a user with the given email already exists
+    let check = await Users.findOne({ email: req.body.email });
+    if (check) {
+      return res.status(400).json({ success: false, errors: "Existing user found with the same email address" });
     }
-  }
 
-  const token = jwt.sign(data, 'secret_ecom')
-  res.json({ success: true, token })
-})
+    // Initialize cart
+    let cart = {};
+    for (let i = 0; i < 300; i++) {
+      cart[i] = 0;
+    }
+
+    // Generate a new user ID
+    let id_user = await Users.countDocuments() + 1; // Count existing users to assign a new ID
+
+    // Create a new user instance
+    const user = new Users({
+      id_user: id_user,
+      name: req.body.username,
+      email: req.body.email,
+      password: req.body.password, // Note: Consider hashing passwords before saving
+      cartData: cart,
+    });
+
+    // Save the user to the database
+    await user.save();
+
+    // Create a token for the user
+    const data = {
+      user: {
+        id: user._id // Use id_user instead of user.id
+      }
+    };
+
+    const token = jwt.sign(data, 'secret_ecom');
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, errors: "Internal server error" });
+  }
+});
 
 app.post('/login', async (req, res) => {
   let user = await Users.findOne({ email: req.body.email })
@@ -501,48 +520,97 @@ app.get('/check-midtrans', async (req, res) => {
   res.json(Midtrans)
 })
 
-const Checkout = mongoose.model('PromoCode', {
+const Checkout = mongoose.model('Orders', {
   id: {
     type: Number,
     required: true,
   },
-  orderId: {
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  nama_customer: {
     type: String,
     required: true,
   },
-  discount: {
-    type: Number,
+  no_telp_customer: {
+    type: String,
     required: true,
   },
-  expirationDate: {
+  alamat_customer: {
+    type: String,
+    required: true,
+  },
+  date: {
     type: Date,
-    required: true,
+    default: Date.now,
   },
+  products: [{
+    id: {
+      type: Number,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+  }],
 })
 
-app.post('/createcheckout', async (req, res) => {
-  let products = await Checkout.find({})
+app.post('/createcheckout', fetchUser, async (req, res) => {
+  const userId = req.user.id; // This comes from the fetchUser  middleware
+  const user = await Users.findById(userId); // Find the user in the database
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+  let checkouts = await Checkout.find({})
   let id
-  if (products.length > 0) {
-    let last_product_array = products.slice(-1)
-    let last_product = last_product_array[0]
-    id = last_product.id + 1
+  if (checkouts.length > 0) {
+    let last_Checkout_array = checkouts.slice(-1)
+    let last_Checkout = last_Checkout_array[0]
+    id = last_Checkout.id + 1
   } else {
     id = 1
   }
-  const product = new Product({
+  const checkout = new Checkout({
     id: id,
-    name: req.body.name,
-    image: req.body.image,
-    category: req.body.category,
-    new_price: req.body.new_price,
-    old_price: req.body.old_price,
+    user_id: userId,
+    nama_customer: user.name,
+    email_customer: user.email,
+    no_telp_customer: req.body.no_telp_customer,
+    alamat_customer: req.body.alamat_customer,
+    products: req.body.products,
   })
-  console.log(product)
-  await product.save()
+  console.log(checkout)
+  await checkout.save()
   console.log("Saved")
   res.json({
     success: true,
-    name: req.body.name,
+    name: user.name,
   })
 })
+
+app.get('/allorders', fetchUser, async (req, res) => {
+  const userId = req.user.id; // Ambil ID pengguna dari objek pengguna yang sudah di-fetch oleh middleware
+  try {
+    const checkouts = await Checkout.find({ user_id: userId }).populate('products'); // Filter pesanan berdasarkan userId
+    const totalCount = await Checkout.countDocuments({ user_id: userId });
+    console.log(`Fetched ${checkouts.length} orders for user ${userId}`);
+    res.json({ checkouts, totalCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error fetching orders' });
+  }
+});

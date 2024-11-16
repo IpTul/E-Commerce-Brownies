@@ -91,7 +91,7 @@ const ListProduct = () => {
               <p>Rp. {products.old_price}</p>
               <p>Rp. {products.new_price}</p>
               <p>{products.category}</p>
-              <div className="listproduct-remove-icon" onClick={() => { remove_product(product.id) }}>
+              <div className="listproduct-remove-icon" onClick={() => { remove_product(products.id) }}>
                 <i className="fa-solid fa-xmark"></i>
               </div>
             </div>

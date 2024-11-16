@@ -3,6 +3,7 @@ import Navbar from './Components/Navbar/Navbar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Home from './Pages/Home';
+import Profile from './Pages/Profile';
 import Product from './Pages/Product';
 import ProductCategory from './Pages/ProductCategory';
 import About from './Pages/About';
@@ -12,6 +13,7 @@ import Footer from './Components/Footer/Footer';
 import BottomBar from './Components/BottomBar/BottomBar';
 
 function App() {
+
   return (
     <div>
       <BrowserRouter>
@@ -21,6 +23,7 @@ function App() {
           <Route path='/brownies' element={<ProductCategory category="brownies" />} />
           <Route path='/cookies' element={<ProductCategory category="cookies" />} />
           <Route path='/about' element={<About />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='/product' element={<Product />} >
             <Route path=':productId' element={<Product />} />
           </Route>

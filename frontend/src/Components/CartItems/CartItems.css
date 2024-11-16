@@ -42,12 +42,12 @@
     cursor: pointer;
     padding: 10px;
     color: white;
-    background-color: #e53131;
+    background-color: #eb3636;
   }
 
   .cartitems-quantity {
-    width: 64px;
-    height: 50px;
+    width: 50px;
+    height: 35px;
     font-size: 18px;
     border: 2px solid #ebebeb;
     background: #fff;
@@ -64,7 +64,7 @@
     display: flex;
     flex-direction: column;
     margin-right: 300px;
-    gap: 40px;
+    gap: 20px;
     color: white;
   }
 
@@ -156,10 +156,11 @@
 
   .cartitems-customersdetails-fields input {
     border: none;
-    width: 504px;
+    width: 465px;
+    height: 48px;
+    border-radius: 40px;
     margin-top: 10px;
     padding-left: 20px;
-    height: 58px;
     font-size: 16px;
     background: #eaeaea;
   }
@@ -175,6 +176,11 @@
     height: 58px;
     color: #fff;
     background: #5e2a00;
+  }
+
+  .payment-url a {
+    text-decoration: none;
+    color: white;
   }
 }
 
@@ -213,12 +219,12 @@
     cursor: pointer;
     padding: 10px;
     color: white;
-    background-color: #e53131;
+    background-color: #e63535;
   }
 
   .cartitems-quantity {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border: 2px solid #ebebeb;
     background: #fff;
   }

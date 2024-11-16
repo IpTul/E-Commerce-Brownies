@@ -24,12 +24,12 @@ const Footer = () => {
         <Link style={{ textDecoration: 'none' }} to='/brownies'><button>Order Now</button></Link>
       </div>
       <div className="footer-bottom">
-        <ul className="footer-links">
+        {/* <ul className="footer-links">
           <li>About Us</li>
           <li>Products</li>
           <li>Contact</li>
           <li>Alamat</li>
-        </ul>
+        </ul> */}
         <div className="footer-social-icon">
           <a href='https://www.instagram.com/browcious_' target='_blank'>
             <div className="footer-icons-container">
