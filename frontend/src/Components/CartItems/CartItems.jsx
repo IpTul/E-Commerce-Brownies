@@ -41,7 +41,6 @@ const CartItems = () => {
     }
   }
 
-  const [nama, setNama] = useState("")
   const [noTelp, setNoTelp] = useState("")
   const [address, setAddress] = useState("")
 
@@ -60,6 +59,15 @@ const CartItems = () => {
     });
 
     if (confirmed) {
+      if (!/^\d+$/.test(noTelp)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Phone Number',
+          text: 'Please enter a valid phone number (numeric only).',
+        })
+        return
+      }
+
       const secret = process.env.REACT_APP_SECRET;
       const encodedSecret = Buffer.from(secret).toString("base64");
       const basicAuth = `Basic ${encodedSecret}`;
@@ -82,6 +90,17 @@ const CartItems = () => {
           return null;
         })
         .filter((item) => item !== null);
+
+      // const calculatedTotal = items.reduce((acc, item) => {
+      //   return acc + (item.price * item.quantity);
+      // }, 0);
+
+      // const grossAmount = calculatedTotal + shippingFee - discount;
+
+      // console.log("Calculated Total:", calculatedTotal);
+      // console.log("Shipping Fee:", shippingFee);
+      // console.log("Discount:", discount);
+      // console.log("Gross Amount:", grossAmount);
 
       const data = {
         item_details: items,
@@ -106,32 +125,37 @@ const CartItems = () => {
 
       const paymentLink = await response.json();
       setPaymentUrl(paymentLink.payment_url);
+      console.log(paymentLink);
 
       const customer_details = {
         no_telp_customer: noTelp,
         alamat_customer: address,
         products: items,
+        total: total,
       };
 
       if (!noTelp || !address) {
-        alert("Please fill in all required fields.");
-      } else {
-        const response2 = await fetch("http://localhost:4000/createcheckout", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          body: JSON.stringify(customer_details),
+        Swal.fire({
+          icon: 'warning',
+          title: 'Please fill in all required fields.',
         });
+      } else {
+        // const response2 = await fetch("http://localhost:4000/createcheckout", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     "auth-token": token,
+        //   },
+        //   body: JSON.stringify(customer_details),
+        // });
 
-        const checkoutResponse = await response2.json();
-        if (checkoutResponse.success) {
-          console.log("Checkout successful:", checkoutResponse);
-          setCartItems(getDefaultCart());
-        } else {
-          console.error("Checkout failed:", checkoutResponse);
-        }
+        // const checkoutResponse = await response2.json();
+        // if (checkoutResponse.success) {
+        //   console.log("Checkout successful:", checkoutResponse);
+        //   setCartItems(getDefaultCart());
+        // } else {
+        //   console.error("Checkout failed:", checkoutResponse);
+        // }
       }
     }
   }
@@ -207,9 +231,9 @@ const CartItems = () => {
             </div>
             <button onClick={handleCheckoutLink}>PROCEED TO CHECKOUT</button>
             <div className="payment-url">
-              {paymentUrl &&
-                <a href={paymentUrl} target="_blank" rel="noopener noreferrer">Payment Link</a>
-              }
+              {/* {noTelp && address ? ( */}
+              <a href={paymentUrl} target="_blank" rel="noopener noreferrer">Payment Link</a>
+              {/* ) : null} */}
             </div>
           </div>
 
@@ -226,21 +250,13 @@ const CartItems = () => {
             </div>
             <div className="cartitems-customersdetails">
               <div className="cartitems-customersdetails-fields">
-                <p>Nama</p>
-                <input
-                  name="name"
-                  type="text"
-                  value={nama}
-                  onChange={(e) => setNama(e.target.value)}
-                />
-              </div>
-              <div className="cartitems-customersdetails-fields">
                 <p>No Telp (Aktif Wa)</p>
                 <input
                   name="notelp"
-                  type="number"
+                  type="text"
                   value={noTelp}
                   onChange={(e) => setNoTelp(e.target.value)}
+                  maxLength={13}
                 />
               </div>
               <div className="cartitems-customersdetails-fields">

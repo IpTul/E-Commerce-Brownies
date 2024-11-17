@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './css/LoginSignup.css'
+import Swal from 'sweetalert2'
 
 const LoginSignup = () => {
 
@@ -21,7 +22,11 @@ const LoginSignup = () => {
 
   const login = async () => {
     if (!isChecked) {
-      alert("Please agree to the terms of use & privacy policy before logging in.")
+      Swal.fire({
+        icon: 'warning',
+        title: 'Terms Agreement',
+        text: 'Please agree to the terms of use & privacy policy before logging in.',
+      })
       return
     }
     console.log("Login", formData)
@@ -39,11 +44,33 @@ const LoginSignup = () => {
       localStorage.setItem('auth-token', responseData.token)
       window.location.replace("/")
     } else {
-      alert(responseData.errors)
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: responseData.errors,
+      });
     }
   }
 
   const signup = async () => {
+    if (!formData.username || !formData.email || !formData.password) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Information',
+        text: 'Please fill in all fields before signing up.',
+      })
+      return
+    }
+
+    if (formData.password.length < 8) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Password Too Short',
+        text: 'Password must be at least 8 characters long.',
+      })
+      return
+    }
+
     console.log("Sign Up", formData)
     let responseData
     await fetch('http://localhost:4000/signup', {
@@ -59,7 +86,11 @@ const LoginSignup = () => {
       localStorage.setItem('auth-token', responseData.token)
       window.location.replace("/")
     } else {
-      alert(responseData.errors)
+      Swal.fire({
+        icon: 'error',
+        title: 'Sign Up Failed',
+        text: responseData.errors,
+      });
     }
   }
 
@@ -70,16 +101,16 @@ const LoginSignup = () => {
         <div className="loginsignup-fields">
           {state === "Sign Up" ? <input name='username' value={formData.username} onChange={changeHandler} type="text" placeholder="Your Name" id="" /> : <></>}
           <input name='email' value={formData.email} onChange={changeHandler} type="email" placeholder="Email Address" id="" />
-          <input name='password' value={formData.password} onChange={changeHandler} type="password" placeholder="password" id="" />
+          <input name='password' value={formData.password} onChange={changeHandler} type="password" placeholder="Password" id="" />
         </div>
         <button onClick={() => { state === "Login" ? login() : signup() }}>Continue</button>
         {state === "Sign Up" ?
-          <p className="loginsignup-login">Already have an account ? <span onClick={() => { setState("Login") }}>Login</span></p> :
-          <p className="loginsignup-login">Create an account ? <span onClick={() => { setState("Sign Up") }}>Click Here</span></p>
+          <p className="loginsignup-login">Already have an account? <span onClick={() => { setState("Login") }}>Login</span></p> :
+          <p className="loginsignup-login">Create an account? <span onClick={() => { setState("Sign Up") }}>Click Here</span></p>
         }
         <div className="loginsignup-agree">
           <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
-          <p>By continuing, i agree to the terms of use & privacy policy.</p>
+          <p>By continuing, I agree to the terms of use & privacy policy.</p>
         </div>
       </div>
     </div>

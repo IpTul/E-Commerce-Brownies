@@ -15,7 +15,7 @@ app.use(cors())
 // Database Connection
 mongoose.connect("mongodb+srv://browniesbrowcious:browniesbrowcious01@browniesbrowcious.3nbw4.mongodb.net/brownies")
 
-// API creation
+// API Createion
 app.listen(port, (error) => {
   if (!error) {
     console.log("Server Running on port " + port)
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
   res.send("Express App is running")
 })
 
-// Image storage
+// image storage
 const storage = multer.diskStorage({
   destination: './upload/images',
   filename: (req, file, cb) => {
@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-// Createing upload image for product
+// createing upload image for product
 app.use('/images', express.static('upload/images'))
 app.post("/upload", upload.single('product'), (req, res) => {
   res.json({
@@ -48,7 +48,7 @@ app.post("/upload", upload.single('product'), (req, res) => {
   })
 })
 
-// Creating product model
+// creating product
 const Product = mongoose.model("Products", {
   id: {
     type: Number,
@@ -84,7 +84,6 @@ const Product = mongoose.model("Products", {
   },
 })
 
-// Creating add new product
 app.post('/addproduct', async (req, res) => {
   let products = await Product.find({})
   let id
@@ -122,7 +121,6 @@ app.post('/removeproduct', async (req, res) => {
   })
 })
 
-// Get all product
 app.get('/allproducts', async (req, res) => {
   try {
     const limit = 100
@@ -162,7 +160,6 @@ const Users = mongoose.model('Users', {
   }
 })
 
-// Create signed user
 app.post('/signup', async (req, res) => {
   try {
     let check = await Users.findOne({ email: req.body.email })
@@ -201,7 +198,6 @@ app.post('/signup', async (req, res) => {
   }
 })
 
-// Create login
 app.post('/login', async (req, res) => {
   let user = await Users.findOne({ email: req.body.email })
   if (user) {
@@ -241,7 +237,6 @@ const Adminusers = mongoose.model('Adminusers', {
   }
 })
 
-// Create admin signup user
 app.post('/adminsignup', async (req, res) => {
   let check = await Adminusers.findOne({ email: req.body.email })
   if (check) {
@@ -270,7 +265,6 @@ app.post('/adminsignup', async (req, res) => {
   res.json({ success: true, token })
 })
 
-// Create admin users account
 app.post('/adminlogin', async (req, res) => {
   let adminuser = await Adminusers.findOne({ email: req.body.email })
   if (adminuser) {
@@ -292,7 +286,6 @@ app.post('/adminlogin', async (req, res) => {
   }
 })
 
-// Creating for validation token
 app.post('/validateToken', async (req, res) => {
   const token = req.headers['auth-token']
   console.log(token)
@@ -324,7 +317,7 @@ app.get('/popularbrownies', async (req, res) => {
   res.send(popular)
 })
 
-// creating middleware fetch user
+//creating middleware fetch user
 const fetchUser = async (req, res, next) => {
   const token = req.header('auth-token')
   if (!token) {
@@ -366,7 +359,7 @@ app.post('/getcart', fetchUser, async (req, res) => {
   res.json(userData.cartData)
 })
 
-// Creating promo code model
+// creating promo code model
 const PromoCode = mongoose.model('PromoCodes', {
   id: {
     type: Number,
@@ -387,7 +380,6 @@ const PromoCode = mongoose.model('PromoCodes', {
   },
 })
 
-// Create promo code
 app.post('/createpromocode', async (req, res) => {
   let promocodes = await PromoCode.find({})
   let id
@@ -414,7 +406,7 @@ app.post('/createpromocode', async (req, res) => {
   })
 })
 
-// Validation promo code
+// creating api for validation promo code
 app.post('/validatepromocode', async (req, res) => {
   const { code } = req.body
 
@@ -435,7 +427,7 @@ app.post('/validatepromocode', async (req, res) => {
   }
 })
 
-// Get promo code
+// creating api get promo code
 app.get('/allpromocodes', async (req, res) => {
   try {
     const limit = 100
@@ -448,7 +440,7 @@ app.get('/allpromocodes', async (req, res) => {
   }
 })
 
-// Remove promo code
+// creating api remove promo code
 app.post('/removecode', async (req, res) => {
   const promocodes = await PromoCode.findOneAndDelete({ id: req.body.id })
   console.log("Remove promo code", promocodes.code)
@@ -465,7 +457,6 @@ app.get('/check-midtrans', async (req, res) => {
   res.json(Midtrans)
 })
 
-// Create checkout model
 const Checkout = mongoose.model('Orders', {
   id: {
     type: Number,
@@ -485,10 +476,6 @@ const Checkout = mongoose.model('Orders', {
   },
   alamat_customer: {
     type: String,
-    required: true,
-  },
-  total: {
-    type: Number,
     required: true,
   },
   date: {
@@ -519,7 +506,6 @@ const Checkout = mongoose.model('Orders', {
   }],
 })
 
-// Create checkout
 app.post('/createcheckout', fetchUser, async (req, res) => {
   const userId = req.user.id
   const user = await Users.findById(userId)
@@ -543,7 +529,6 @@ app.post('/createcheckout', fetchUser, async (req, res) => {
     no_telp_customer: req.body.no_telp_customer,
     alamat_customer: req.body.alamat_customer,
     products: req.body.products,
-    total: req.body.total,
   })
   console.log(checkout)
   await checkout.save()
@@ -554,7 +539,6 @@ app.post('/createcheckout', fetchUser, async (req, res) => {
   })
 })
 
-// Get all orders for user
 app.get('/allorders', fetchUser, async (req, res) => {
   const userId = req.user.id
   try {
@@ -567,27 +551,3 @@ app.get('/allorders', fetchUser, async (req, res) => {
     res.status(500).send({ message: 'Error fetching orders' })
   }
 })
-
-// Get order total by order ID
-app.get('/order/:id', async (req, res) => {
-  try {
-    const orderId = req.params.id;
-    console.log("Received request for order ID:", orderId); // Debugging line
-
-    const order = await Checkout.findOne({ id: orderId });
-
-    if (!order) {
-      console.log("Order not found for ID:", orderId); // Debugging line
-      return res.status(404).json({ success: false, message: 'Order not found' });
-    }
-
-    console.log("Order found:", order); // Debugging line
-    res.json({
-      success: true,
-      total: order.total,
-    });
-  } catch (error) {
-    console.error("Error fetching order total:", error); // Debugging line
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
