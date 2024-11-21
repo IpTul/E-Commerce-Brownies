@@ -11,9 +11,15 @@ import splash2 from '../Assets/splash2.png'
 const Popular = () => {
 
   const [popularProducts, setPopularProducts] = useState([])
+  const link = process.env.REACT_APP_API
+
+  const handle = () => {
+    console.log('link', link)
+  }
 
   useEffect(() => {
-    fetch('http://localhost:4000/popularbrownies')
+    // fetch('http://localhost:4000/popularbrownies')
+    fetch(`${link}/popularbrownies`)
       .then((response) => response.json())
       .then((data) => setPopularProducts(data))
   }, [])

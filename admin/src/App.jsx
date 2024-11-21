@@ -7,13 +7,15 @@ import { useEffect } from 'react'
 
 const App = () => {
   const navigate = useNavigate()
+  const link = process.env.REACT_APP_API
 
   useEffect(() => {
     const token = localStorage.getItem('authToken')
     if (!token) {
       navigate('/login')
     } else {
-      fetch('http://localhost:4000/validateToken', {
+      // fetch('https://localhost:4000/validateToken', {
+      fetch(`${link}/validateToken`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',

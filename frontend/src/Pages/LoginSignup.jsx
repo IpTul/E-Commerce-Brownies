@@ -4,6 +4,8 @@ import Swal from 'sweetalert2'
 
 const LoginSignup = () => {
 
+  const link = process.env.REACT_APP_API
+
   const [state, setState] = useState("Login")
   const [formData, setFormData] = useState({
     username: "",
@@ -31,7 +33,7 @@ const LoginSignup = () => {
     }
     console.log("Login", formData)
     let responseData
-    await fetch('http://localhost:4000/login', {
+    await fetch(`${link}/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/form-data',
@@ -73,7 +75,7 @@ const LoginSignup = () => {
 
     console.log("Sign Up", formData)
     let responseData
-    await fetch('http://localhost:4000/signup', {
+    await fetch(`${link}/signup`, {
       method: 'POST',
       headers: {
         Accept: 'application/form-data',

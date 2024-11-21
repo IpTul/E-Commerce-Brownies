@@ -5,6 +5,9 @@ import { Buffer } from "buffer"
 import Swal from 'sweetalert2';
 
 const CartItems = () => {
+
+  const link = process.env.REACT_APP_API
+
   const { all_product, cartItems, removeFromCart, getCartDetails, setCartItems, getDefaultCart } =
     useContext(ShopContext)
   const { productIds } = getCartDetails()
@@ -28,7 +31,7 @@ const CartItems = () => {
   const handlePromoCodeSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch("http://localhost:4000/validatepromocode", {
+      const response = await fetch(`${link}/validatepromocode`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: promoCode }),

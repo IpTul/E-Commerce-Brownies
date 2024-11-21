@@ -7,12 +7,12 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const token = localStorage.getItem('auth-token');
+  const link = process.env.REACT_APP_API
 
   useEffect(() => {
     const fetchOrders = async () => {
       const token = localStorage.getItem('auth-token');
       if (!token) {
-        // Tindakan jika token tidak ada
         console.error('No auth token found');
         return;
       }
@@ -20,7 +20,7 @@ const Profile = () => {
       console.log('Decoded Token:', decodedToken);
       const id_user = decodedToken.user.id;
       try {
-        const response = await fetch(`http://localhost:4000/allorders?user_id=${id_user}`, {
+        const response = await fetch(`${link}/allorders?user_id=${id_user}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
