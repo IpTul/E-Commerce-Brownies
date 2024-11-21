@@ -16,9 +16,12 @@ const CartItems = () => {
     const quantity = cartItems[product.id] || 0
     return acc + product.new_price * quantity
   }, 0)
+  const quantity = all_product.map((product) => {
+    const qty = cartItems[product.id]
+    return qty
+  })
 
-  const shippingFee = 0
-  const total = subtotal - discount + shippingFee
+  const total = subtotal
 
   const [paymentUrl, setPaymentUrl] = useState("")
 
@@ -44,7 +47,7 @@ const CartItems = () => {
   const [noTelp, setNoTelp] = useState("")
   const [address, setAddress] = useState("")
 
-  const token = localStorage.getItem('auth-token');
+  // const token = localStorage.getItem('auth-token');
 
   const handleCheckoutLink = async () => {
     const { value: confirmed } = await Swal.fire({
@@ -56,7 +59,7 @@ const CartItems = () => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, proceed!',
       cancelButtonText: 'No, cancel!',
-    });
+    })
 
     if (confirmed) {
       if (!/^\d+$/.test(noTelp)) {
@@ -121,24 +124,24 @@ const CartItems = () => {
           },
           body: JSON.stringify(data),
         }
-      );
+      )
 
-      const paymentLink = await response.json();
-      setPaymentUrl(paymentLink.payment_url);
-      console.log(paymentLink);
+      const paymentLink = await response.json()
+      setPaymentUrl(paymentLink.payment_url)
+      console.log(paymentLink)
 
       const customer_details = {
         no_telp_customer: noTelp,
         alamat_customer: address,
         products: items,
         total: total,
-      };
+      }
 
       if (!noTelp || !address) {
         Swal.fire({
           icon: 'warning',
           title: 'Please fill in all required fields.',
-        });
+        })
       } else {
         // const response2 = await fetch("http://localhost:4000/createcheckout", {
         //   method: "POST",
@@ -215,13 +218,17 @@ const CartItems = () => {
               </div>
               <hr />
               <div className="cartitems-total-item">
-                <p>Shipping Fee</p>
-                <p>Free</p>
-              </div>
-              <hr />
-              <div className="cartitems-total-item">
-                <p style={{ color: "#FCD441" }}>Discount Promo</p>
-                <p style={{ color: "#FCD441" }}>Rp. {discount}</p>
+                <p>Quantity</p>
+                {all_product.map((product) => {
+                  const quantity = cartItems[product.id]
+                  if (quantity > 0) {
+                    return (
+                      <div>
+                        <p>{cartItems[product.id]}</p>
+                      </div>
+                    )
+                  }
+                })}
               </div>
               <hr />
               <div className="cartitems-total-item">
@@ -231,23 +238,13 @@ const CartItems = () => {
             </div>
             <button onClick={handleCheckoutLink}>PROCEED TO CHECKOUT</button>
             <div className="payment-url">
-              {/* {noTelp && address ? ( */}
-              <a href={paymentUrl} target="_blank" rel="noopener noreferrer">Payment Link</a>
-              {/* ) : null} */}
+              {paymentUrl && noTelp && address ? (
+                <a href={paymentUrl} target="_blank" rel="noopener noreferrer">Payment Link</a>
+              ) : null}
             </div>
           </div>
 
           <div className="cartitems-details">
-            <p>If you have a promo code, Enter it here</p>
-            <div className="cartitems-promobox">
-              <input
-                type="textbox"
-                placeholder="Promo Code"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-              />
-              <button onClick={handlePromoCodeSubmit}>SUBMIT</button>
-            </div>
             <div className="cartitems-customersdetails">
               <div className="cartitems-customersdetails-fields">
                 <p>No Telp (Aktif Wa)</p>

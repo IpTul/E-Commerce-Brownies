@@ -554,6 +554,33 @@ app.post('/createcheckout', fetchUser, async (req, res) => {
   })
 })
 
+// Get all orders
+app.get('/getorders', async (req, res) => {
+  try {
+    const limit = 100
+    const checkouts = await Checkout.find({})
+    console.log(`Fetched ${checkouts.length} orders`)
+    res.send(checkouts)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({ message: 'Error fetching orders' })
+  }
+})
+
+app.get('/getorders2', async (req, res) => {
+  try {
+    const limit = 100
+    const checkouts = await Checkout.find({})
+    const totalCount = await Checkout.countDocuments()
+    console.log(`Fetched ${checkouts.length} checkouts`)
+    res.json({ checkouts, totalCount })
+    // res.json({ products, totalCount })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({ message: 'Error fetching checkouts' })
+  }
+})
+
 // Get all orders for user
 app.get('/allorders', fetchUser, async (req, res) => {
   const userId = req.user.id

@@ -154,6 +154,11 @@
     margin-top: 3vh;
   }
 
+  .cartitems-customersdetails-fields p {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
   .cartitems-customersdetails-fields input {
     border: none;
     width: 465px;

@@ -7,19 +7,18 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
 
   const fetchInfo = async () => {
-    try {
-      const response = await fetch('http://localhost:4000/allorders');
-      const data = await response.json();
-
-      if (Array.isArray(data.checkouts)) {
-        setAllOrders(data.checkouts);
-      } else {
-        console.error('Expected an array but got:', data.checkouts);
-      }
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
-  };
+    await fetch('http://localhost:4000/getorders2')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data.checkouts)) {
+          setAllOrders(data.checkouts)
+        } else {
+          console.error('Invalid', data)
+          setAllOrders([])
+        }
+      })
+      .catch((error) => console.error('Error fetching orders', error))
+  }
 
   useEffect(() => {
     fetchInfo();
@@ -27,11 +26,11 @@ const Dashboard = () => {
 
   const handleViewClick = (order) => {
     setSelectedOrder(order);
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
     setSelectedOrder(null); // Reset selected order
   };
 
@@ -53,29 +52,32 @@ const Dashboard = () => {
         <table className="order-content">
           <thead>
             <tr>
-              <th>Id</th>
+              <th>No</th>
               <th>Customer Name</th>
               <th>No Telp</th>
               <th>Date</th>
-              <th>Products</th>
+              <th>Alamat</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {allOrders.map((order, index) => (
-              <tr key={index}>
-                <td>{order.id}</td>
-                <td>{order.nama_customer}</td>
-                <td>{order.no_telp_customer}</td>
-                <td>{new Date(order.date).toLocaleString()}</td>
-                <td>{order.products.length} items</td>
-                <td>
-                  <button onClick={() => handleViewClick(order)}>View</button>
-                  <p>Hapus</p>
-                  <p>Edit</p>
-                </td>
-              </tr>
-            ))}
+            {allOrders.map((order, index) => {
+              return (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{order.nama_customer}</td>
+                  <td>{order.no_telp_customer}</td>
+                  <td>{new Date(order.date).toLocaleString()}</td>
+                  <td>{order.alamat_customer}</td>
+                  {/* <td>{order.products.length} items</td> */}
+                  <td>
+                    <button onClick={() => handleViewClick(order)}>View</button>
+                    <p>Hapus</p>
+                    <p>Edit</p>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
