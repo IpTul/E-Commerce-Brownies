@@ -137,6 +137,30 @@ app.get('/allproducts', async (req, res) => {
   }
 })
 
+// creating update product
+app.post('/updateproduct', upload.single('product'), async (req, res) => {
+  const { id, name, category, new_price } = req.body;
+  const image = req.file ? req.file.filename : null; // Check if a new image is uploaded
+
+  const updatedProduct = await Product.findOneAndUpdate(
+    { id: id },
+    {
+      name,
+      image: image ? `http://localhost:${port}/images/${image}` : undefined, // Update image if new one is provided
+      category,
+      new_price
+    },
+    { new: true }
+  );
+
+  if (updatedProduct) {
+    console.log("Updated");
+    res.json({ success: true, name: updatedProduct.name });
+  } else {
+    res.json({ success: false, message: "Product not found" });
+  }
+});
+
 // creating user login
 const Users = mongoose.model('Users', {
   id_user: {
@@ -581,6 +605,44 @@ app.get('/getorders2', async (req, res) => {
   }
 })
 
+// Create update order
+app.post('/updateorders', async (req, res) => {
+  const { id, nama_customer, no_telp_customer, alamat_customer, products } = req.body;
+
+  try {
+    // Find the order by ID and update the fields
+    const updatedOrder = await Checkout.findOneAndUpdate(
+      { id: id }, // Assuming 'id' is the unique identifier for the order
+      {
+        nama_customer: nama_customer,
+        no_telp_customer: no_telp_customer,
+        alamat_customer: alamat_customer,
+        products: products, // Update products if necessary
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    console.log("Updated Order:", updatedOrder);
+    res.json({ success: true, message: 'Order updated successfully', updatedOrder });
+  } catch (error) {
+    console.error("Error updating order:", error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.post('/removeorders', async (req, res) => {
+  await Checkout.findOneAndDelete({ id: req.body.id })
+  console.log("Removed")
+  res.json({
+    success: true,
+    name: req.body.name,
+  })
+})
+
 // Get all orders for user
 app.get('/allorders', fetchUser, async (req, res) => {
   const userId = req.user.id
@@ -616,5 +678,47 @@ app.get('/order/:id', async (req, res) => {
   } catch (error) {
     console.error("Error fetching order total:", error); // Debugging line
     res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.get('/total-checkouts', async (req, res) => {
+  try {
+    const totalCount = await Checkout.countDocuments();
+
+    res.json({
+      success: true,
+      totalCheckouts: totalCount
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error fetching total checkouts count' });
+  }
+});
+
+app.get('/total-products', async (req, res) => {
+  try {
+    const totalCount = await Product.countDocuments();
+
+    res.json({
+      success: true,
+      totalProducts: totalCount
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error fetching total product count' });
+  }
+});
+
+app.get('/total-users', async (req, res) => {
+  try {
+    const totalCount = await Users.countDocuments();
+
+    res.json({
+      success: true,
+      totalUsers: totalCount
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error fetching total product count' });
   }
 });

@@ -50,7 +50,7 @@ const CartItems = () => {
   const [noTelp, setNoTelp] = useState("")
   const [address, setAddress] = useState("")
 
-  // const token = localStorage.getItem('auth-token');
+  const token = localStorage.getItem('auth-token');
 
   const handleCheckoutLink = async () => {
     const { value: confirmed } = await Swal.fire({
@@ -146,22 +146,22 @@ const CartItems = () => {
           title: 'Please fill in all required fields.',
         })
       } else {
-        // const response2 = await fetch("http://localhost:4000/createcheckout", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //     "auth-token": token,
-        //   },
-        //   body: JSON.stringify(customer_details),
-        // });
+        const response2 = await fetch("http://localhost:4000/createcheckout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+          body: JSON.stringify(customer_details),
+        });
 
-        // const checkoutResponse = await response2.json();
-        // if (checkoutResponse.success) {
-        //   console.log("Checkout successful:", checkoutResponse);
-        //   setCartItems(getDefaultCart());
-        // } else {
-        //   console.error("Checkout failed:", checkoutResponse);
-        // }
+        const checkoutResponse = await response2.json();
+        if (checkoutResponse.success) {
+          console.log("Checkout successful:", checkoutResponse);
+          setCartItems(getDefaultCart());
+        } else {
+          console.error("Checkout failed:", checkoutResponse);
+        }
       }
     }
   }

@@ -1,73 +1,109 @@
 @media (min-width: 481px) {
-  .list-product {
-    display: flex;
-    flex-direction: column;
-    width: 160vh;
-    height: 100vh;
-    padding: 30px 50px;
-    border-radius: 6px;
-    background: white;
-  }
-
-  .listproduct-format-main {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-    padding: 20px 0px;
-    color: #454545;
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  .listproduct-format {
-    align-items: center;
-    font-weight: normal;
-  }
-
-  .listproduct-product-icon {
-    height: 200px;
-  }
-
-  .listproduct-remove-icon {
-    cursor: pointer;
-    /* margin: auto; */
-    margin: 35px;
-  }
-
-  .listproduct-remove-icon i {
-    padding: 10px;
-    background: red;
+  button {
+    border: none;
+    height: 2rem;
+    width: 5rem;
     color: white;
+    border-radius: 50px;
+    background-color: #451f00;
+    cursor: pointer;
+    transition: 0.1s;
   }
 
-  .listproduct-allproducts {
-    overflow-y: auto;
+  button:active {
+    transform: scale(0.9);
   }
 
-  .filter-options {
-    margin-bottom: 20px;
+  .box-product {
+    width: 80vw;
+    height: 100%;
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    background-color: white;
+    border-radius: 10px;
   }
 
-  .filter-dropdown {
-    float: right;
+  .product-content {
+    margin-top: 10px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .product-content th {
+    width: 100vw;
+  }
+
+  .product-content th,
+  .product-content td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  .product-content th {
+    background-color: #f2f2f2;
+  }
+
+  .product-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .product-content tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .product-content td:last-child {
+    display: flex;
+    height: 15vh;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .modal-content {
+    width: 25vw;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure modal is above other content */
+  }
+
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 400px; /* Set a width for the modal */
+    max-width: 90%; /* Responsive width */
+  }
+
+  .modal-content h2 {
+    margin-top: 0; /* Remove top margin for the heading */
+  }
+
+  .modal-content form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+  }
+
+  .modal-content label {
+    margin-bottom: 10px; /* Space between labels */
+  }
+
+  .modal-content input {
     padding: 10px;
-    width: 150px;
-    height: 40px;
-    font-size: 16px;
-    color: #454545;
-    border: 1px solid #c3c3c3;
-    border-radius: 4px;
-  }
-
-  .search-input {
-    padding: 10px;
-    width: 200px;
-    height: 40px;
-    font-size: 16px;
-    color: #454545;
-    border: 1px solid #c3c3c3;
-    border-radius: 4px;
+    border: 1px solid #ccc; /* Light border for inputs */
+    border-radius: 4px; /* Rounded corners for inputs */
+    margin-bottom: 15px; /* Space between inputs */
   }
 }
 

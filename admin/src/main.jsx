@@ -11,6 +11,7 @@ import Navbar from './Components/Navbar/Navbar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard'
 import AddProduct from './Components/AddProduct/AddProduct';
 import ListProduct from './Components/ListProduct/ListProduct';
+import OrderList from './Components/OrderList/OrderList';
 import ProtectedRoute from './Pages/ProtectedRoute.jsx';
 import LoginPanel from './Pages/LoginPanel/LoginPanel.jsx';
 import NotFound from "./Pages/NotFound";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
           {
             path: "list-promocode",
             element: <ListPromoCode />,
+          },
+          {
+            path: "list-order",
+            element: <OrderList />,
           },
         ]
       },
