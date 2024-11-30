@@ -3,12 +3,12 @@ import React, { createContext, useEffect, useState } from 'react'
 export const ShopContext = createContext(null)
 
 const getDefaultCart = () => {
-  let cart = {}
+  let cart = {};
   for (let index = 0; index < 300 + 1; index++) {
-    cart[index] = 0
+    cart[index] = 0; // Initialize cart items to 0
   }
-  return cart
-}
+  return cart;
+};
 
 const ShopContextProvider = (props) => {
 
@@ -24,6 +24,7 @@ const ShopContextProvider = (props) => {
       .then((data) => {
         setAll_product(data.products)
         setProductCount(data.totalCount)
+        console.log(data.products);
       })
 
     if (localStorage.getItem('auth-token')) {
@@ -46,7 +47,8 @@ const ShopContextProvider = (props) => {
       fetch(`${link}/addtocart`, {
         method: 'POST',
         headers: {
-          Accept: 'application/form-data',
+          Accept: 'application/form-data', // Mongo
+          // Accept: 'text/plain',
           'auth-token': `${localStorage.getItem('auth-token')}`,
           'Content-Type': 'application/json',
         },
@@ -74,8 +76,9 @@ const ShopContextProvider = (props) => {
     }
   }
 
+  // ================= For MongoDB =================
   const getTotalCartItems = () => {
-    let totalItem = 0
+    let totalItem = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
         totalItem += cartItems[item]

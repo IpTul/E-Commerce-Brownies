@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ListProduct.css';
+import Swal from 'sweetalert2'
 
 const ListProduct = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -30,17 +31,57 @@ const ListProduct = () => {
   }, []);
 
   const remove_product = async (id) => {
-    await fetch('http://localhost:4000/removeproduct', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: id }),
-    }).then((resp) => resp.json()).then((data) => {
-      data.success ? alert("Product Removed") : alert("Failed");
+    // Show confirmation dialog first
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'Cancel!',
     });
-    await fetchInfo();
+
+    // If the user confirmed, proceed with the removal
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch('http://localhost:4000/removeproduct', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: id }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          Swal.fire({
+            title: 'Product Removed!',
+            icon: 'success',
+          });
+        } else {
+          Swal.fire({
+            title: 'Failed!',
+            text: 'Could not remove the product.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error removing product', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+
+      await fetchInfo();
+    }
   };
 
   const handleEditSubmit = async (event) => {
@@ -56,16 +97,36 @@ const ListProduct = () => {
     await fetch('http://localhost:4000/updateproduct', {
       method: 'POST',
       body: formData,
-    }).then((resp) => resp.json()).then((data) => {
-      if (data.success) {
-        alert("Product Updated");
-        fetchInfo(); // Refresh the product list
-      } else {
-        alert("Failed to update product");
-      }
-    });
-
-    closeEditModal();
+    }).then((resp) => resp.json())
+      .then((data) => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes!',
+          cancelButtonText: 'Cancel!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: 'Product Updated!',
+              icon: "success",
+            })
+            fetchInfo();
+            closeEditModal();
+          }
+        })
+      }).catch((error) => {
+        console.error('Error updating order', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      })
   };
 
   const Products = allProducts.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
@@ -105,75 +166,77 @@ const ListProduct = () => {
   };
 
   return (
-    <div className="box-product">
-      <h1>Product List</h1>
-      <table className="product-content">
-        <thead>
-          <tr>
-            <th style={{ width: '1vw' }}>No</th>
-            <th>Image</th>
-            <th>Products</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th style={{ width: '1vw' }}>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Products.map((product, index) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1 + currentPage * itemsPerPage}</td>
-                <td><img src={product.image} style={{ width: '4vw' }} alt={product.name} /></td>
-                <td>{product.name}</td>
-                <td>{product.new_price}</td>
-                <td>{product.category}</td>
-                <td>
-                  <button onClick={() => openModal(product)}>View</button>
-                  <button onClick={() => openEditModal(product)}>Edit</button>
-                  <button onClick={() => remove_product(product.id)}>Hapus</button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      <div className="pagination">
-        <button onClick={handlePreviousPage} disabled={currentPage === 0} style={{ marginRight: '1rem' }}>Previous</button>
-        <button onClick={handleNextPage} disabled={currentPage >= totalPages - 1}>Next</button>
+    <div className="container">
+      <div className="container-content">
+        <h1>Product List</h1>
+        <table className="product-content">
+          <thead>
+            <tr>
+              <th style={{ width: '1vw' }}>No</th>
+              <th>Image</th>
+              <th>Products</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th style={{ width: '1vw' }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Products.map((product, index) => {
+              return (
+                <tr key={index}>
+                  <td>{index + 1 + currentPage * itemsPerPage}</td>
+                  <td><img src={product.image} style={{ width: '4vw' }} alt={product.name} /></td>
+                  <td>{product.name}</td>
+                  <td>{product.new_price}</td>
+                  <td>{product.category}</td>
+                  <td>
+                    <button onClick={() => openModal(product)}>View</button>
+                    <button onClick={() => openEditModal(product)}>Edit</button>
+                    <button onClick={() => remove_product(product.id)}>Hapus</button>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        <div className="pagination">
+          <button onClick={handlePreviousPage} disabled={currentPage === 0} style={{ marginRight: '1rem' }}>Previous</button>
+          <button onClick={handleNextPage} disabled={currentPage >= totalPages - 1}>Next</button>
+        </div>
+
+        {/* Modal for viewing product details */}
+        {showModal && (
+          <div className="modal-overlay-product">
+            <div className="modal-content-product">
+              <h2>{selectedProduct.name}</h2>
+              <img src={selectedProduct.image} alt={selectedProduct.name} style={{ width: '250px' }} />
+              <p>Price : {selectedProduct.new_price}</p>
+              <p>Category : {selectedProduct.category}</p>
+              <button onClick={closeModal}>Close</button>
+            </div>
+          </div>
+        )}
+
+        {showEditModal && (
+          <div className="modal-overlay-product">
+            <div className="modal-content-product">
+              <h2>Edit Product</h2>
+              <form onSubmit={handleEditSubmit}>
+                <p>Products</p>
+                <input type="text" value={editProduct.name} onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })} />
+                <p>Image</p>
+                <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} />
+                <p>Category</p>
+                <input type="text" value={editProduct.category} onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })} />
+                <p>Price</p>
+                <input type="number" value={editProduct.new_price} onChange={(e) => setEditProduct({ ...editProduct, new_price: e.target.value })} />
+                <button type="submit">Update</button>
+                <button type="button" onClick={closeEditModal}>Cancel</button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Modal for viewing product details */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>{selectedProduct.name}</h2>
-            <img src={selectedProduct.image} alt={selectedProduct.name} style={{ width: '250px' }} />
-            <p>Price : {selectedProduct.new_price}</p>
-            <p>Category : {selectedProduct.category}</p>
-            <button onClick={closeModal}>Close</button>
-          </div>
-        </div>
-      )}
-
-      {showEditModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Edit Product</h2>
-            <form onSubmit={handleEditSubmit}>
-              <p>Products</p>
-              <input type="text" value={editProduct.name} onChange={(e) => setEditProduct({ ...editProduct, name: e.targett.value })} />
-              <p>Image</p>
-              <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} />
-              <p>Category</p>
-              <input type="text" value={editProduct.category} onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })} />
-              <p>Price</p>
-              <input type="number" value={editProduct.new_price} onChange={(e) => setEditProduct({ ...editProduct, new_price: e.target.value })} />
-              <button type="submit">Update</button>
-              <button type="button" onClick={closeEditModal}>Cancel</button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

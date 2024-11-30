@@ -1,4 +1,4 @@
-const port = 4000
+const port = 27017
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
@@ -7,13 +7,15 @@ const multer = require('multer')
 const path = require('path')
 const cors = require('cors')
 const { type } = require('os')
-let Midtrans = require('midtrans-nodejs-client')
 
 app.use(express.json())
 app.use(cors())
 
 // Database Connection
-mongoose.connect("mongodb+srv://browniesbrowcious:browniesbrowcious01@browniesbrowcious.3nbw4.mongodb.net/brownies")
+mongoose.connect("mongodb+srv://browniesbrowcious:browniesbrowcious01@browniesbrowcious.3nbw4.mongodb.net/brownies", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 
 // API creation
 app.listen(port, (error) => {
@@ -483,11 +485,11 @@ app.post('/removecode', async (req, res) => {
 })
 
 require('dotenv').config()
-app.get('/check-midtrans', async (req, res) => {
-  console.log(Midtrans)
-  res.send(Midtrans)
-  res.json(Midtrans)
-})
+// app.get('/check-midtrans', async (req, res) => {
+//   console.log(Midtrans)
+//   res.send(Midtrans)
+//   res.json(Midtrans)
+// })
 
 // Create checkout model
 const Checkout = mongoose.model('Orders', {

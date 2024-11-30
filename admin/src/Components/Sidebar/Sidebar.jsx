@@ -1,10 +1,17 @@
 import React from 'react'
 import './Sidebar.css'
+import logo from '../../assets/brownies.png'
 import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
     <div className='sidebar'>
+      <Link to={"/admin/dashboard"} style={{ textDecoration: "none" }}>
+        <div className="sidebar-logo">
+          <img src={logo} style={{ width: '3vw' }} />
+        </div>
+      </Link>
+      <hr />
       <Link to={"/admin/list-order"} style={{ textDecoration: "none" }}>
         <div className="sidebar-item">
           <i className="fa-solid fa-cart-shopping fa-xl"></i>

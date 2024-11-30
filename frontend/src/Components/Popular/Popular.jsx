@@ -17,12 +17,12 @@ const Popular = () => {
     console.log('link', link)
   }
 
-  useEffect(() => {
-    // fetch('http://localhost:4000/popularbrownies')
-    fetch(`${link}/popularbrownies`)
-      .then((response) => response.json())
-      .then((data) => setPopularProducts(data))
-  }, [])
+  // useEffect(() => {
+  //   // fetch('http://localhost:4000/popularbrownies')
+  //   fetch(`${link}/popularbrownies`)
+  //     .then((response) => response.json())
+  //     .then((data) => setPopularProducts(data))
+  // }, [])
 
   return (
     <div className='popular'>

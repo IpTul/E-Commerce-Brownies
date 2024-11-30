@@ -1,7 +1,12 @@
 @media (min-width: 481px) {
   body {
     margin: 0;
-    font-family: 'poppins';
+    font-family: "poppins";
+  }
+
+  hr {
+    border: 1px solid white;
+    width: 7vw;
   }
 
   .sidebar {
@@ -9,7 +14,14 @@
     display: flex;
     flex-direction: column;
     height: 130vh;
-    background: #5E2A00;
+    background: #5e2a00;
+  }
+
+  .sidebar-logo {
+    /* border: 1px solid white; */
+    display: flex;
+    padding: 1rem 0;
+    justify-content: center;
   }
 
   .sidebar-item {

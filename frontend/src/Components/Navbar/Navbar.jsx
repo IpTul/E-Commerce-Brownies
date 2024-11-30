@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import './Navbar.css'
 import { Link, NavLink } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -30,6 +30,9 @@ const Navbar = () => {
     });
   };
 
+  const totalItems = getTotalCartItems(); // Call the function once and store the result
+  console.log("Total items in cart:", totalItems);
+
   return (
     <div className="navbar">
       <ul className="nav-menu" >
@@ -51,7 +54,7 @@ const Navbar = () => {
         }
         <div className="nav-login-cart" >
           {localStorage.getItem('auth-token') ? <Link to='/cart'><img src={cart_icon} alt="cart_icon" /></Link> : <Link to='/login'><img src={cart_icon} alt="cart_icon" /></Link>}
-          {localStorage.getItem('auth-token') ? <div className="nav-cart-count">{getTotalCartItems()}</div> : <></>}
+          {localStorage.getItem('auth-token') ? <div className="nav-cart-count">{totalItems}</div> : <></>}
         </div>
       </ul >
     </div>

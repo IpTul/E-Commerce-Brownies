@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './OrderList.css'
+import Swal from 'sweetalert2'
 
 const OrderList = () => {
   const [allOrders, setAllOrders] = useState([])
@@ -24,6 +25,7 @@ const OrderList = () => {
       products: order.products,
     });
     setIsEditModalOpen(true);
+    setSelectedOrder(null);
   };
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
@@ -71,15 +73,35 @@ const OrderList = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        if (data.success) {
-          alert("Order Updated");
-          fetchInfo(); // Refresh the order list
-          handleCloseEditModal(); // Close the modal
-        } else {
-          alert("Failed to update order");
-        }
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes!',
+          cancelButtonText: 'Cancel!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Order Update!",
+              icon: "success"
+            });
+            fetchInfo()
+            handleCloseEditModal()
+          }
+        });
       })
-      .catch((error) => console.error('Error updating order', error));
+      .catch((error) => {
+        console.error('Error updating order', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
   };
 
   const remove_product = async (id) => {
@@ -150,7 +172,7 @@ const OrderList = () => {
 
   return (
     <div className='container'>
-      <div className="box-order">
+      <div className="container-content">
         <h1>Order List</h1>
         <table className="order-content">
           <thead>
@@ -183,7 +205,7 @@ const OrderList = () => {
           </tbody>
         </table>
         <div className="pagination">
-          <button className='pagination-btn' onClick={handlePreviousPage} disabled={currentPage === 0}>Previous</button>
+          <button className='pagination-btn' onClick={handlePreviousPage} disabled={currentPage === 0} style={{ marginRight: '1rem' }}>Previous</button>
           <button className='pagination-btn' onClick={handleNextPage} disabled={currentPage >= totalPages - 1}>Next</button>
           <button className='export-csv' onClick={exportToCSV}>Export to CSV</button>
         </div>
@@ -191,8 +213,8 @@ const OrderList = () => {
 
       {/* Modal View */}
       {isModalOpen && selectedOrder && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={`modal-overlay-order ${isModalOpen ? 'show' : ''}`}>
+          <div className={`modal-content-order ${isModalOpen ? 'show' : ''}`}>
             <h2>Order Details</h2>
             <table className='order-content' style={{ marginBottom: "1rem" }}>
               <thead>
@@ -216,6 +238,19 @@ const OrderList = () => {
               <tbody>
                 <tr>
                   <td>{selectedOrder.alamat_customer}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className='order-content' style={{ marginBottom: "1rem" }}>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{new Date(selectedOrder.date).toLocaleString()}</td>
                 </tr>
               </tbody>
             </table>
@@ -245,38 +280,33 @@ const OrderList = () => {
 
       {/* Modal Edit */}
       {isEditModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={`modal-overlay-order ${isEditModalOpen ? 'show' : ''}`}>
+          <div className={`modal-content-order ${isEditModalOpen ? 'show' : ''}`}>
             <h2>Edit Order</h2>
             <form onSubmit={handleEditSubmit}>
-              <label>
-                Customer Name:
-                <input
-                  type="text"
-                  value={editOrder.nama_customer}
-                  onChange={(e) => setEditOrder({ ...editOrder, nama_customer: e.target.value })}
-                  required
-                />
-              </label>
-              <label>
-                No Telp:
-                <input
-                  type="text"
-                  value={editOrder.no_telp_customer}
-                  onChange={(e) => setEditOrder({ ...editOrder, no_telp_customer: e.target.value })}
-                  required
-                />
-              </label>
-              <label>
-                Alamat:
-                <input
-                  type="text"
-                  value={editOrder.alamat_customer}
-                  onChange={(e) => setEditOrder({ ...editOrder, alamat_customer: e.target.value })}
-                  required
-                />
-              </label>
-              {/* You can add more fields for products if necessary */}
+              <p>Customer Name</p>
+              <input
+                id='readonly'
+                type="text"
+                value={editOrder.nama_customer}
+                onChange={(e) => setEditOrder({ ...editOrder, nama_customer: e.target.value })}
+                readOnly
+              />
+              <p>No Telp</p>
+              <input
+                type="text"
+                value={editOrder.no_telp_customer}
+                onChange={(e) => setEditOrder({ ...editOrder, no_telp_customer: e.target.value })}
+                required
+              />
+              <p>Alamat</p>
+              <input
+                type="text"
+                value={editOrder.alamat_customer}
+                onChange={(e) => setEditOrder({ ...editOrder, alamat_customer: e.target.value })}
+                required
+              />
+              {/* Anda bisa menambahkan lebih banyak field untuk produk jika perlu */}
               <button type="submit">Save</button>
               <button type="button" onClick={handleCloseEditModal}>Cancel</button>
             </form>

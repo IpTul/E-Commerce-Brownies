@@ -184,7 +184,7 @@ const Dashboard = () => {
               <th style={{ width: '10vw' }}>No Telp</th>
               <th style={{ width: '25vw' }}>Date</th>
               <th style={{ width: '30vw' }}>Alamat</th>
-              <th style={{ width: '10vw' }}>Action</th>
+              <th style={{ width: '1vw' }}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -198,8 +198,6 @@ const Dashboard = () => {
                   <td>{order.alamat_customer}</td>
                   <td>
                     <button onClick={() => handleViewClick(order)}>View</button>
-                    <button>Edit</button>
-                    <button onClick={() => { remove_product(order.id) }}>Hapus</button>
                   </td>
                 </tr>
               )
@@ -211,9 +209,11 @@ const Dashboard = () => {
           <button onClick={handleNextPage} disabled={currentPage >= totalPages - 1}>Next</button>
         </div>
       </div>
+
+      {/* Modal View */}
       {isModalOpen && selectedOrder && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={`modal-overlay-dashboard ${isModalOpen ? 'show' : ''}`}>
+          <div className={`modal-content-dashboard ${isModalOpen ? 'show' : ''}`}>
             <h2>Order Details</h2>
             <table className='order-content' style={{ marginBottom: "1rem" }}>
               <thead>

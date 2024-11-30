@@ -166,6 +166,8 @@ const CartItems = () => {
     }
   }
 
+  const totalQuantity = Object.values(cartItems).reduce((acc, qty) => acc + qty, 0);
+
   return (
     <div className="cartitems">
       <div className="cartitems-container">
@@ -222,16 +224,7 @@ const CartItems = () => {
               <hr />
               <div className="cartitems-total-item">
                 <p>Quantity</p>
-                {all_product.map((product) => {
-                  const quantity = cartItems[product.id]
-                  if (quantity > 0) {
-                    return (
-                      <div>
-                        <p>{cartItems[product.id]}</p>
-                      </div>
-                    )
-                  }
-                })}
+                <p>{totalQuantity}</p>
               </div>
               <hr />
               <div className="cartitems-total-item">
