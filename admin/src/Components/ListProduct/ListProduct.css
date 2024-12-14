@@ -1,20 +1,17 @@
 @media (min-width: 481px) {
-  button {
-    border: none;
-    height: 2rem;
-    width: 5rem;
-    color: white;
-    border-radius: 0.5rem;
-    background-color: #5e2a00;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.1s;
+  .title-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
-
-  button:active {
-    transform: scale(0.9);
+  .title-content input {
+    height: 5vh;
+    width: 15vw;
+    border-radius: 1rem;
+    border: 1px solid black;
+    padding-left: 1rem;
   }
-
   .product-content {
     margin-top: 10px;
     border-collapse: collapse;
@@ -24,7 +21,9 @@
   .product-content th {
     width: 100vw;
   }
-
+  .product-content thead tr th {
+    text-align: center;
+  }
   .product-content th,
   .product-content td {
     border: 1px solid #dddddd;
@@ -46,7 +45,7 @@
 
   .product-content td:last-child {
     display: flex;
-    height: 15vh;
+    height: 23vh;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -94,10 +93,21 @@
     border-radius: 0.5rem;
     padding-left: 0.5rem;
   }
-
-  .modal-content-product button {
-    margin-top: 1.5rem;
-    margin-right: 1rem;
+  .pagination {
+    display: flex;
+    flex-direction: row;
+  }
+  .pagination-btn-number button {
+    display: flex;
+    background-color: transparent;
+    color: #5e2a00;
+    width: 2vw;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  .active-pagination {
+    font-weight: bold;
   }
 }
 

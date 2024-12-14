@@ -117,7 +117,7 @@ const CartItems = () => {
       };
 
       const response = await fetch(
-        `${process.env.REACT_APP_API}/v1/payment-links`,
+        `https://api.sandbox.midtrans.com/v1/payment-links`,
         {
           method: "POST",
           headers: {
@@ -195,7 +195,7 @@ const CartItems = () => {
                       />
                       <p>{product.name}</p>
                       <p>{product.new_price}</p>
-                      <button className="cartitems-quantity">
+                      <button className="cartitems-quantity" style={{ color: 'black' }}>
                         {cartItems[product.id]}
                       </button>
                       <p>{product.new_price * cartItems[product.id]}</p>
@@ -251,6 +251,10 @@ const CartItems = () => {
                   onChange={(e) => setNoTelp(e.target.value)}
                   maxLength={13}
                 />
+                <div className="info">
+                  <h5>* Nomor whatsapp ini akan dihubungi apabila terjadi kendala.</h5>
+                  <h5>Contoh : 08127658876</h5>
+                </div>
               </div>
               <div className="cartitems-customersdetails-fields">
                 <p>Alamat</p>

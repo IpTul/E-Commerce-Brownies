@@ -16,6 +16,7 @@ const AddProduct = () => {
     category: "brownies",
     old_price: 10,
     new_price: "",
+    description: "",
   })
 
   const changeHandler = (e) => {
@@ -23,12 +24,12 @@ const AddProduct = () => {
   }
 
   const add_product = async () => {
-    console.log(productDetails);
-    let responseData;
-    let product = productDetails;
+    console.log(productDetails)
+    let responseData
+    let product = productDetails
 
-    let formData = new FormData();
-    formData.append('product', image);
+    let formData = new FormData()
+    formData.append('product', image)
 
     // Show confirmation alert before proceeding with the upload
     const confirmResult = await Swal.fire({
@@ -40,7 +41,7 @@ const AddProduct = () => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes',
       cancelButtonText: 'Cancel'
-    });
+    })
 
     if (confirmResult.isConfirmed) {
       // Proceed with image upload
@@ -52,11 +53,11 @@ const AddProduct = () => {
         body: formData,
       })
         .then((resp) => resp.json())
-        .then((data) => { responseData = data });
+        .then((data) => { responseData = data })
 
       if (responseData.success) {
-        product.image = responseData.image_url;
-        console.log(product);
+        product.image = responseData.image_url
+        console.log(product)
 
         // Add the product
         await fetch('http://localhost:4000/addproduct', {
@@ -76,8 +77,8 @@ const AddProduct = () => {
                 text: 'Product Added Successfully!',
                 icon: 'success',
                 confirmButtonText: 'OK'
-              });
-              window.location.reload();
+              })
+              window.location.reload()
             } else {
               // Show failure alert
               Swal.fire({
@@ -85,18 +86,18 @@ const AddProduct = () => {
                 text: 'Failed to add the product. Please try again.',
                 icon: 'error',
                 confirmButtonText: 'OK'
-              });
+              })
             }
           })
           .catch((error) => {
-            console.error('Error adding product', error);
+            console.error('Error adding product', error)
             Swal.fire({
               title: 'Error!',
               text: 'Something went wrong. Please try again later.',
               icon: 'error',
               confirmButtonText: 'OK'
-            });
-          });
+            })
+          })
       } else {
         // Handle image upload failure
         Swal.fire({
@@ -104,7 +105,7 @@ const AddProduct = () => {
           text: 'Failed to upload image. Please try again.',
           icon: 'error',
           confirmButtonText: 'OK'
-        });
+        })
       }
     } else {
       // User canceled the action
@@ -113,7 +114,7 @@ const AddProduct = () => {
         text: 'Product addition has been cancelled.',
         icon: 'info',
         confirmButtonText: 'OK'
-      });
+      })
     }
   }
 
@@ -122,8 +123,8 @@ const AddProduct = () => {
       <div className='container-content'>
         <button onClick={() => { add_product() }} className='addproduct-btn-mobile'>ADD</button>
         <div className="addproduct-itemfield">
-          <p>Product title</p>
-          <input value={productDetails.name} onChange={changeHandler} type="text" name='name' placeholder='Type here' />
+          <p>Product Name</p>
+          <input value={productDetails.name} onChange={changeHandler} type="text" name='name' placeholder='Name' />
         </div>
         <div className="addproduct-price">
           {/* <div className="addproduct-itemfield">
@@ -132,8 +133,12 @@ const AddProduct = () => {
         </div> */}
           <div className="addproduct-itemfield">
             <p>Product Offer Price</p>
-            <input value={productDetails.new_price} onChange={changeHandler} type="number" name='new_price' placeholder='Type here' />
+            <input value={productDetails.new_price} onChange={changeHandler} type="number" name='new_price' placeholder='Price' />
           </div>
+        </div>
+        <div className="addproduct-itemfield">
+          <p>Product Description</p>
+          <input value={productDetails.description} onChange={changeHandler} type="text" name="description" placeholder="Description" />
         </div>
         <div className="addproduct-itemfield">
           <p>Product Category</p>

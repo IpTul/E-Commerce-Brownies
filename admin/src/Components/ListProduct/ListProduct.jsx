@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import './ListProduct.css';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const ListProduct = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 4;
-  const [selectedProduct, setSelectedProduct] = useState(null); // State for the selected product
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
-  const [editProduct, setEditProduct] = useState(null)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [imageFile, setImageFile] = useState(null)
+  const itemsPerPage = 3;
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchInfo = async () => {
     await fetch('http://localhost:4000/allproducts')
@@ -31,7 +32,6 @@ const ListProduct = () => {
   }, []);
 
   const remove_product = async (id) => {
-    // Show confirmation dialog first
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -43,7 +43,6 @@ const ListProduct = () => {
       cancelButtonText: 'Cancel!',
     });
 
-    // If the user confirmed, proceed with the removal
     if (result.isConfirmed) {
       try {
         const response = await fetch('http://localhost:4000/removeproduct', {
@@ -67,7 +66,7 @@ const ListProduct = () => {
             title: 'Failed!',
             text: 'Could not remove the product.',
             icon: 'error',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
           });
         }
       } catch (error) {
@@ -76,7 +75,7 @@ const ListProduct = () => {
           title: 'Error!',
           text: 'Something went wrong. Please try again later.',
           icon: 'error',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
         });
       }
 
@@ -88,10 +87,11 @@ const ListProduct = () => {
     event.preventDefault();
 
     let formData = new FormData();
-    formData.append('product', imageFile); // Append the new image file if available
+    formData.append('product', imageFile);
     formData.append('id', editProduct.id);
     formData.append('name', editProduct.name);
     formData.append('category', editProduct.category);
+    formData.append('description', editProduct.description);
     formData.append('new_price', editProduct.new_price);
 
     await fetch('http://localhost:4000/updateproduct', {
@@ -113,24 +113,33 @@ const ListProduct = () => {
             Swal.fire({
               title: 'Product Updated!',
               icon: "success",
-            })
+            });
             fetchInfo();
             closeEditModal();
           }
-        })
+        });
       }).catch((error) => {
         console.error('Error updating order', error);
         Swal.fire({
           title: 'Error!',
           text: 'Something went wrong. Please try again later.',
           icon: 'error',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
         });
-      })
+      });
   };
 
-  const Products = allProducts.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
-  const totalPages = Math.ceil(allProducts.length / itemsPerPage);
+  const Products = allProducts
+    .filter(product =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
+  const totalPages = Math.ceil(allProducts.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  ).length / itemsPerPage);
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -142,6 +151,28 @@ const ListProduct = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
+  };
+
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 0; i < totalPages; i++) {
+      pageNumbers.push(
+        <div className="pagination-btn-number">
+          <button
+            key={i}
+            className={`pagination-number ${i === currentPage ? 'active-pagination' : ''}`}
+            onClick={() => handlePageClick(i)}
+          >
+            {i + 1}
+          </button>
+        </div>
+      );
+    }
+    return pageNumbers;
   };
 
   const openModal = (product) => {
@@ -156,7 +187,7 @@ const ListProduct = () => {
 
   const openEditModal = (product) => {
     setEditProduct(product);
-    setImageFile(null); // Reset image file state
+    setImageFile(null);
     setShowEditModal(true);
   };
 
@@ -168,43 +199,55 @@ const ListProduct = () => {
   return (
     <div className="container">
       <div className="container-content">
-        <h1>Product List</h1>
+        <div className="title-content">
+          <h1>Product List</h1>
+          <input
+            type="text"
+            placeholder="Search by name or category"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <table className="product-content">
           <thead>
             <tr>
               <th style={{ width: '1vw' }}>No</th>
-              <th>Image</th>
+              <th style={{ width: '1vw' }}>Image</th>
               <th>Products</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th style={{ width: '1vw' }}>Action</th>
+              <th style={{ width: '50vw' }}>Description</th>
+              <th style={{ width: '15vw' }}>Price</th>
+              <th style={{ width: '10vw' }}>Category</th>
+              <th style={{ width: '10vw' }}>Action</th>
             </tr>
           </thead>
           <tbody>
             {Products.map((product, index) => {
               return (
                 <tr key={index}>
-                  <td>{index + 1 + currentPage * itemsPerPage}</td>
-                  <td><img src={product.image} style={{ width: '4vw' }} alt={product.name} /></td>
+                  <td style={{ textAlign: 'center' }}>{index + 1 + currentPage * itemsPerPage}</td>
+                  <td><img src={product.image} style={{ width: '6vw' }} alt={product.name} /></td>
                   <td>{product.name}</td>
-                  <td>{product.new_price}</td>
-                  <td>{product.category}</td>
-                  <td>
-                    <button onClick={() => openModal(product)}>View</button>
-                    <button onClick={() => openEditModal(product)}>Edit</button>
-                    <button onClick={() => remove_product(product.id)}>Hapus</button>
+                  <td>{product.description}</td>
+                  <td>Rp. {product.new_price}</td>
+                  <td style={{ textAlign: 'center' }}>{product.category}</td>
+                  <td className='action'>
+                    <button className='btn-view' onClick={() => openModal(product)}><i className='fa fa-eye'></i></button>
+                    <button className='btn-edit' onClick={() => openEditModal(product)}><i className='fa fa-pencil'></i></button>
+                    <button className='btn-delete' onClick={() => remove_product(product.id)}><i className='fa fa-trash'></i></button>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
-        <div className="pagination">
-          <button onClick={handlePreviousPage} disabled={currentPage === 0} style={{ marginRight: '1rem' }}>Previous</button>
-          <button onClick={handleNextPage} disabled={currentPage >= totalPages - 1}>Next</button>
+        <div className="end-content">
+          <div className="pagination">
+            <button onClick={handlePreviousPage} disabled={currentPage === 0}>Previous</button>
+            {renderPageNumbers()}
+            <button onClick={handleNextPage} disabled={currentPage >= totalPages - 1}>Next</button>
+          </div>
         </div>
 
-        {/* Modal for viewing product details */}
         {showModal && (
           <div className="modal-overlay-product">
             <div className="modal-content-product">
@@ -212,6 +255,7 @@ const ListProduct = () => {
               <img src={selectedProduct.image} alt={selectedProduct.name} style={{ width: '250px' }} />
               <p>Price : {selectedProduct.new_price}</p>
               <p>Category : {selectedProduct.category}</p>
+              <p>Description : {selectedProduct.description}</p>
               <button onClick={closeModal}>Close</button>
             </div>
           </div>
@@ -228,6 +272,8 @@ const ListProduct = () => {
                 <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} />
                 <p>Category</p>
                 <input type="text" value={editProduct.category} onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })} />
+                <p>Description</p>
+                <input type="text" value={editProduct.description} onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })} />
                 <p>Price</p>
                 <input type="number" value={editProduct.new_price} onChange={(e) => setEditProduct({ ...editProduct, new_price: e.target.value })} />
                 <button type="submit">Update</button>

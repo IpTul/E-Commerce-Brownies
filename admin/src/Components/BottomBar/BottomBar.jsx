@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const BottomBar = () => {
 
-  const [menu, setMenu] = useState("home");
+  const [menu, setMenu] = useState("home")
 
   return (
     <div className='bottom-bar'>

@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import './ProductDisplay.css'
 import star_icon from '../Assets/star-icon.png'
 import star_null_icon from '../Assets/star-null-icon.png'
@@ -11,10 +12,22 @@ const ProductDisplay = (props) => {
   const { addToCart } = useContext(ShopContext)
   const [isOpen, setIsopen] = useState(false)
   const [qty, setQty] = useState(1)
+  const history = useNavigate();
 
-  const test = () => {
-    console.log('button')
+  if (!product) {
+    return // You can customize this message or redirect
   }
+
+  const handleClick = () => {
+    try {
+      // Kode yang mungkin menyebabkan kesalahan
+      throw new Error("Uncaught runtime error!"); // Contoh kesalahan
+    } catch (error) {
+      console.error(error);
+      // Navigasi ke halaman error
+      history('/brownies');
+    }
+  };
 
   const togglePopup = () => {
     setIsopen(!isOpen)
@@ -55,7 +68,7 @@ const ProductDisplay = (props) => {
           <img src={plus} role="button" onClick={add_quantity} />
         </div>
         <div className="productdisplay-desc">
-          <h1>Brownies Rasa Cokelat</h1>
+          <h1>{product.description}</h1>
         </div>
         <div className="productdisplay-right-price">
           <div className="productdisplay-right-prices">Rp. {product.new_price}</div>

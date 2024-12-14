@@ -1,4 +1,4 @@
-const port = 27017
+const port = 4000
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
@@ -12,10 +12,7 @@ app.use(express.json())
 app.use(cors())
 
 // Database Connection
-mongoose.connect("mongodb+srv://browniesbrowcious:browniesbrowcious01@browniesbrowcious.3nbw4.mongodb.net/brownies", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect("mongodb+srv://browniesbrowcious:browniesbrowcious01@browniesbrowcious.3nbw4.mongodb.net/brownies")
 
 // API creation
 app.listen(port, (error) => {
@@ -76,6 +73,10 @@ const Product = mongoose.model("Products", {
     type: Number,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,
@@ -104,6 +105,7 @@ app.post('/addproduct', async (req, res) => {
     category: req.body.category,
     new_price: req.body.new_price,
     old_price: req.body.old_price,
+    description: req.body.description,
   })
   console.log(product)
   await product.save()
@@ -141,7 +143,7 @@ app.get('/allproducts', async (req, res) => {
 
 // creating update product
 app.post('/updateproduct', upload.single('product'), async (req, res) => {
-  const { id, name, category, new_price } = req.body;
+  const { id, name, category, description, new_price } = req.body;
   const image = req.file ? req.file.filename : null; // Check if a new image is uploaded
 
   const updatedProduct = await Product.findOneAndUpdate(
@@ -150,6 +152,7 @@ app.post('/updateproduct', upload.single('product'), async (req, res) => {
       name,
       image: image ? `http://localhost:${port}/images/${image}` : undefined, // Update image if new one is provided
       category,
+      description,
       new_price
     },
     { new: true }
@@ -521,6 +524,14 @@ const Checkout = mongoose.model('Orders', {
     type: Date,
     default: Date.now,
   },
+  status_order: {
+    type: String,
+    default: true,
+  },
+  status_order_desc: {
+    type: String,
+    default: true,
+  },
   products: [{
     id: {
       type: Number,
@@ -569,6 +580,8 @@ app.post('/createcheckout', fetchUser, async (req, res) => {
     no_telp_customer: req.body.no_telp_customer,
     alamat_customer: req.body.alamat_customer,
     products: req.body.products,
+    status_order: "Pending",
+    status_order_desc: "Menunggu konfirmasi penjual",
     total: req.body.total,
   })
   console.log(checkout)
@@ -609,7 +622,7 @@ app.get('/getorders2', async (req, res) => {
 
 // Create update order
 app.post('/updateorders', async (req, res) => {
-  const { id, nama_customer, no_telp_customer, alamat_customer, products } = req.body;
+  const { id, nama_customer, no_telp_customer, alamat_customer, date, status_order, status_order_desc, products } = req.body;
 
   try {
     // Find the order by ID and update the fields
@@ -619,7 +632,10 @@ app.post('/updateorders', async (req, res) => {
         nama_customer: nama_customer,
         no_telp_customer: no_telp_customer,
         alamat_customer: alamat_customer,
-        products: products, // Update products if necessary
+        date: date,
+        status_order: status_order,
+        status_order_desc: status_order_desc,
+        products: products,
       },
       { new: true } // Return the updated document
     );
@@ -722,5 +738,28 @@ app.get('/total-users', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: 'Error fetching total product count' });
+  }
+});
+
+app.get('/getorders-today', async (req, res) => {
+  try {
+    const today = new Date();
+    // Set the start and end of the day
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    // Fetch orders created today
+    const checkouts = await Checkout.find({
+      date: {
+        $gte: startOfDay,
+        $lt: endOfDay
+      }
+    });
+
+    console.log(`Fetched ${checkouts.length} orders for today`);
+    res.json({ checkouts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error fetching orders for today' });
   }
 });

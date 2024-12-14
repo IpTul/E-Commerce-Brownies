@@ -67,6 +67,9 @@
     gap: 20px;
     color: white;
   }
+  .cartitems-total h1 {
+    color: white;
+  }
 
   .cartitems-total-item {
     display: flex;
@@ -85,6 +88,10 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.5s;
+  }
+  .cartitems-total button:hover {
+    background: #451f00;
   }
 
   .cartitems-promocode {
@@ -186,6 +193,12 @@
   .payment-url a {
     text-decoration: none;
     color: white;
+  }
+  .info {
+    margin-top: 0.3rem;
+    font-size: 14px;
+    font-weight: 100;
+    color: yellow;
   }
 }
 

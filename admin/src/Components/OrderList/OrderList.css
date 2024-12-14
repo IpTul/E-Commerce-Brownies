@@ -4,12 +4,6 @@
     background-color: white;
     border-radius: 1rem;
   }
-  .export-csv {
-    width: 8vw;
-    margin-right: 0px;
-    float: right;
-  }
-
   .modal-overlay-order {
     position: fixed;
     top: 0;
@@ -36,6 +30,14 @@
 
   .modal-content-order input {
     width: 98%;
+    height: 4vh;
+    border: 1px solid grey;
+    border-radius: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .modal-content-order select {
+    width: 99.4%;
     height: 4vh;
     border: 1px solid grey;
     border-radius: 0.5rem;
