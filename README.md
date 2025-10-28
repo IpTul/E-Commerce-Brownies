@@ -1,40 +1,225 @@
-👩‍💻Working In Progress
+# 🍫 E-Commerce Brownies
 
-## 🌐 Socials:
-<div align="left" style="text-align: center; align-items: center; justify-content: center; justify-items: center;">
-<h3><img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=&color=7289DA&logoColor=white&labelColor=&style=for-the-badge" height="20" alt="discord logo"  />  : IpTul</h3>
-</div>
+[![Work In Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow)](https://github.com/IpTul/E-Commerce-Brownies)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-# 💻 Tech Stack:
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white) ![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
-# 📊 GitHub Stats:
-![](https://github-readme-stats.vercel.app/api?username=IpTul&theme=dark&hide_border=true&include_all_commits=true&count_private=false)<br/>
-![](https://github-readme-streak-stats.herokuapp.com/?user=IpTul&theme=dark&hide_border=true)<br/>
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=IpTul&theme=dark&hide_border=true&include_all_commits=true&count_private=false&layout=compact)
+> A delicious e-commerce platform for ordering premium brownies online
 
-## 🏆 GitHub Trophies
-![](https://github-profile-trophy.vercel.app/?username=IpTul&theme=radical&no-frame=false&no-bg=true&margin-w=4)
+## 📋 Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## 🎯 About
+
+E-Commerce Brownies is a modern, user-friendly online platform designed for brownie enthusiasts to browse, customize, and order delicious brownies delivered right to their doorstep. This project aims to provide a seamless shopping experience with an intuitive interface and secure payment processing.
+
+## ✨ Features
+
+### Current Features
+- 🏠 **Home Page** - Attractive landing page showcasing featured products
+- 🍰 **Product Catalog** - Browse various brownie flavors and varieties
+- 🛒 **Shopping Cart** - Add, remove, and manage items
+- 👤 **User Authentication** - Register and login functionality
+- 📱 **Responsive Design** - Mobile-friendly interface
+
+### Planned Features
+- 💳 **Payment Integration** - Secure checkout process
+- 📦 **Order Tracking** - Real-time order status updates
+- ⭐ **Product Reviews** - Customer ratings and feedback
+- 🎁 **Gift Options** - Custom gift wrapping and messages
+- 📊 **Admin Dashboard** - Inventory and order management
+- 🔔 **Notifications** - Email and push notifications
+
+## 🛠 Tech Stack
+
+**Frontend:**
+- HTML5
+- CSS3
+- JavaScript
+- [Add your framework if using React, Vue, etc.]
+
+**Backend:**
+- [Add your backend technology - Node.js, Python, PHP, etc.]
+- [Add your framework - Express, Django, Laravel, etc.]
+
+**Database:**
+- [Add your database - MongoDB, MySQL, PostgreSQL, etc.]
+
+**Other Tools:**
+- Git & GitHub for version control
+- [Add any other tools you're using]
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v14 or higher) - *if using Node.js*
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Database System] - *based on your choice*
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/IpTul/E-Commerce-Brownies.git
+   cd E-Commerce-Brownies
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` file with your configuration
+
+4. **Initialize the database**
+   ```bash
+   # Add your database setup commands
+   npm run migrate
+   ```
+
+5. **Start the development server**
+   ```bash
+   npm start
+   # or
+   yarn start
+   ```
+
+6. **Open your browser**
+   Navigate to `http://localhost:3000` (or your configured port)
+
+### Configuration
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=brownies_ecommerce
+DB_USER=your_username
+DB_PASSWORD=your_password
+
+# Authentication
+JWT_SECRET=your_jwt_secret_key
+SESSION_SECRET=your_session_secret
+
+# Payment Gateway (if applicable)
+PAYMENT_API_KEY=your_payment_api_key
+
+# Email Service (if applicable)
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=your_email@example.com
+EMAIL_PASSWORD=your_email_password
+```
+
+## 💻 Usage
+
+### For Customers
+
+1. **Browse Products** - Explore the catalog of delicious brownies
+2. **Add to Cart** - Select your favorite items and quantities
+3. **Checkout** - Provide delivery details and complete payment
+4. **Track Order** - Monitor your order status in real-time
+
+### For Administrators
+
+1. **Login to Admin Panel** - Access the admin dashboard
+2. **Manage Products** - Add, edit, or remove products
+3. **Process Orders** - View and update order statuses
+4. **View Analytics** - Monitor sales and customer data
+
+## 📁 Project Structure
+
+```
+E-Commerce-Brownies/
+├── public/              # Static files (images, fonts, etc.)
+├── src/                 # Source code
+│   ├── components/      # Reusable components
+│   ├── pages/          # Page components
+│   ├── services/       # API services
+│   ├── utils/          # Utility functions
+│   └── styles/         # CSS/styling files
+├── server/             # Backend code (if applicable)
+│   ├── controllers/    # Route controllers
+│   ├── models/         # Database models
+│   ├── routes/         # API routes
+│   └── middleware/     # Custom middleware
+├── tests/              # Test files
+├── .env.example        # Example environment variables
+├── .gitignore          # Git ignore file
+├── package.json        # Project dependencies
+└── README.md          # This file
+```
+
+## 🗺 Roadmap
+
+- [x] Basic project setup
+- [x] Frontend design and layout
+- [ ] User authentication system
+- [ ] Product management
+- [ ] Shopping cart functionality
+- [ ] Payment integration
+- [ ] Order management system
+- [ ] Admin dashboard
+- [ ] Email notifications
+- [ ] Order tracking
+- [ ] Product reviews and ratings
+- [ ] Mobile app version
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📧 Contact
+
+**IpTul** - [@IpTul](https://github.com/IpTul)
+
+Project Link: [https://github.com/IpTul/E-Commerce-Brownies](https://github.com/IpTul/E-Commerce-Brownies)
 
 ---
-[![](https://visitcount.itsvg.in/api?id=IpTul&icon=0&color=5)](https://visitcount.itsvg.in)
 
-  ## 💰 You can help me by Donating
-  [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/https://buymeacoffee.com/iptul) 
+## 🙏 Acknowledgments
 
-<picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake-dark.svg"
-  />
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake.svg"
-  />
-  <img
-    alt="github contribution grid snake animation"
-    src="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake.svg"
-  />
-</picture>
+- Thanks to all contributors who help improve this project
+- Inspired by the love of delicious brownies
+- Built with ❤️ and lots of chocolate
 
-  
-<!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
+---
+
+⚠️ **Note:** This project is currently under active development. Features and documentation may change frequently.
