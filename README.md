@@ -1,6 +1,6 @@
 # 🍫 E-Commerce Brownies
 
-[![Work In Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow)](https://github.com/IpTul/E-Commerce-Brownies)
+[![Work In Progress](https://img.shields.io/badge/finished_-blue)](https://github.com/IpTul/E-Commerce-Brownies)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 > A delicious e-commerce platform for ordering premium brownies online
